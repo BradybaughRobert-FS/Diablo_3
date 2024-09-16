@@ -1,36 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const charRoutes = require("./charRoutes");
 
-// localhost: 3000/api
+// Root route
 router.get("/", (req, res) => {
-    res.status(200).json ({
-        message: "GET to API",
-        metadata: {
-            hostname: req.hostname,
-            method: req.method,
-        },
-    });
-});
-
-router.get("/:id", (req,res) => {
-    const { id } = req.params;
-    res
-    .status(200)
-    .json({
-        message: "GET to /api/:id",
-        id,
-        metadata: { hostname: req.hostname, method: req.method },
-    });
+    res.status(200).json({ success: true, message: `${req.method} - Request made` });
 });
 
 
-router.post("/", (req, res) => {
-    const { data } = req.body;
-    res.status(200).json({
-        message: "POST to /api", 
-        data,
-        metadata: {hostname: req.hostname, method: req.method},
-    });
-});
+router.use("/characters", charRoutes);
 
-module.exports = router; 
+module.exports = router;

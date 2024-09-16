@@ -1,6 +1,20 @@
+## V.0.0.1 [9-15-24]
+
+### Changes Made
+- Updated `charRoutes.js` to:
+  - Import controller functions from `charCtrl.js`.
+  - Use the imported functions for corresponding routes (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`).
+- Added `charCtrl.js` file in the `controller` folder to handle character-related logic:
+  - Implemented controller functions: `getAllCharacters`, `getCharacterById`, `createCharacter`, `updateCharacter`, `patchCharacter`, `deleteCharacter`.
+- Created `controller` folder inside the `app` folder.
+
 ## V.0.0.1 [9-14-24]
 
 ### Changes Made
+- Updated `app/index.js` to:
+  - Correctly use `/api/v1` as the base path for route handling with `routeHandler`.
+  - Simplify and clarify the root route response message.
+- Updated `routes/index.js` to handle `GET` requests with a success message dynamically indicating the HTTP method used.
 - Added `const router = require("./routes");` to import the router in `app/index.js`.
 - Reviewed and added `app.use('/api', router);` to correctly mount the API routes, resolving all issues with routing in the application.
 
