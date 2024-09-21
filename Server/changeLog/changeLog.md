@@ -1,14 +1,37 @@
-## V.0.0.1 [9-15-24]
+## v.0.0.1 [9-21-24]
 
 ### Changes Made
-- Updated `charRoutes.js` to:
-  - Import controller functions from `charCtrl.js`.
-  - Use the imported functions for corresponding routes (`GET`, `POST`, `PUT`, `PATCH`, `DELETE`).
-- Added `charCtrl.js` file in the `controller` folder to handle character-related logic:
-  - Implemented controller functions: `getAllCharacters`, `getCharacterById`, `createCharacter`, `updateCharacter`, `patchCharacter`, `deleteCharacter`.
-- Created `controller` folder inside the `app` folder.
+- Added `Morgan` to `app/index.js`.
+- Updated the `createCharacter` function in `charCtrl.js` to log incoming data in a readable format.
+- Implemented pagination for the `getAllCharacters` function to handle character retrieval.
+- Improved error handling for `updateCharacter` and `patchCharacter` functions to include validation for required fields.
+- Organized code in controller files for better readability and structure.
 
-## V.0.0.1 [9-14-24]
+## v.0.0.1 [9-15-24]
+
+### Changes Made
+- Removed `experience` field from the `Characters.js` schema as it is not needed.
+- Added debugging step: `const data = req.body; console.log("data >>>", data);` in `createCharacter` function.
+- Defined `characterSchema` for the Diablo 3 character model with fields:
+  - `name` (optional)
+  - `classType` (required, based on Diablo 3 classes)
+  - `level` (required)
+  - `createdDate` (defaults to current date).
+- Created `Characters.js` inside the `models` folder.
+- Created `models` folder inside the `app` folder.
+- Updated `.env` file with:
+  - `PORT = 5001`
+  - `MONGODB_URI=mongodb://127.0.0.1:27017/Diablo_3`.
+- Updated `server.js` to:
+  - Import and call `connectDB` from `./app/db/config` to connect to MongoDB.
+  - Ensure proper handling of database connection before starting the server.
+- Created `config.js` inside the `db` folder to handle MongoDB connection:
+  - Defined `connectDB` function using Mongoose to connect to the database.
+  - Removed deprecated Mongoose options (`useUnifiedTopology`, `useNewUrlParser`).
+  - Included error handling for connection failures.
+- Installed `mongoose` using npm for MongoDB integration.
+
+## v.0.0.1 [9-14-24]
 
 ### Changes Made
 - Updated `app/index.js` to:
@@ -16,15 +39,15 @@
   - Simplify and clarify the root route response message.
 - Updated `routes/index.js` to handle `GET` requests with a success message dynamically indicating the HTTP method used.
 - Added `const router = require("./routes");` to import the router in `app/index.js`.
-- Reviewed and added `app.use('/api', router);` to correctly mount the API routes, resolving all issues with routing in the application.
+- Reviewed and added `app.use('/api', router);` to correctly mount the API routes.
 
-## V.0.0.1 [9-12-24]
+## v.0.0.1 [9-12-24]
 
 ### Changes Made
 - Added `index.js` inside the `routes` folder to set up basic routing for `GET` and `POST` requests.
 - Created `routes` folder inside the `app` folder.
 
-## V.0.0.1 [9-11-24]
+## v.0.0.1 [9-11-24]
 
 ### Changes Made
 - Created `index.js` file inside the `app` folder.
@@ -36,12 +59,7 @@
 - Created `.env` file with `PORT = 3000`.
 - Updated `.gitignore` to include `.env` and `node_modules/`.
 
-## V.0.0.1 [9-10-24]
+## v.0.0.1 [9-10-24]
 
 ### Changes Made
-- Added `server.js` file inside the `server` folder to establish it as a working directory.
-- Installed `nodemon` as a development dependency using `npm install nodemon -D`.
-- Initialized project with `npm init -y` to create `package.json`.
-- Added `changeLog.md` file inside the `changeLog` folder to document changes.
-- Created `changeLog` folder inside the `server` folder.
-- Created `client` and `server` folders.
+- Added `server.js` file inside the `server` folder to establish it as a working directory for the server.
