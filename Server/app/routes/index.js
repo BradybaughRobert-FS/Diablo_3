@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const charRoutes = require("./charRoutes");
+const charRoutes = require('./charRoutes'); // Import character routes
+const skillRoutes = require('./skillRoutes'); // Import skill routes
 
-// Root route
-router.get("/", (req, res) => {
-    res.status(200).json({ success: true, message: `${req.method} - Request made` });
-});
-
-
+// Use character routes
 router.use("/characters", charRoutes);
+
+// Use skill routes
+router.use("/skills", skillRoutes); // Adding skill routes
 
 module.exports = router;

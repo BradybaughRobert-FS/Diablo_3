@@ -1,6 +1,7 @@
 const Character = require("../models/characters");
+const { getAvailableSkills } = require('../helpers/skillHelper'); // Import the helper function
 
-// Get all characters with pagination
+// Get all characters
 const getAllCharacters = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
@@ -18,9 +19,9 @@ const getAllCharacters = async (req, res) => {
             success: true,
             message: `GET all characters on page ${page}`,
             data: characters,
-            total: totalCharacters, // Total number of characters
-            currentPage: page, // Current page number
-            totalPages: Math.ceil(totalCharacters / limit), // Total number of pages
+            total: totalCharacters, // Optional: total number of characters
+            currentPage: page, // Optional: current page number
+            totalPages: Math.ceil(totalCharacters / limit) // Optional: total number of pages
         });
     } catch (error) {
         res.status(500).json({
@@ -60,9 +61,6 @@ const getCharacterById = async (req, res) => {
 const createCharacter = async (req, res) => {
     const { name, classType, level } = req.body;
 
-    // Log the incoming data in a more readable format
-    console.log("data >>>", JSON.stringify({ name, classType, level }, null, 2));
-
     // Validate input
     if (!classType || !level) {
         return res.status(400).json({
@@ -72,16 +70,21 @@ const createCharacter = async (req, res) => {
     }
 
     try {
+        // Fetch available skills for the class and level
+        const availableSkills = await getAvailableSkills(classType, level);
+
+        // Create the new character with available skills
         const newCharacter = new Character({
             name,
             classType,
             level,
+            skills: availableSkills, // Attach the skills to the character
         });
 
         const savedCharacter = await newCharacter.save();
         res.status(201).json({
             success: true,
-            message: "Character created",
+            message: "Character created with available skills",
             data: savedCharacter,
         });
     } catch (error) {
@@ -107,9 +110,13 @@ const updateCharacter = async (req, res) => {
     }
 
     try {
+        // Fetch available skills for the updated class and level
+        const availableSkills = await getAvailableSkills(classType, level);
+
+        // Update the character with new data and available skills
         const updatedCharacter = await Character.findByIdAndUpdate(
             id,
-            { name, classType, level },
+            { name, classType, level, skills: availableSkills }, // Update skills based on class and level
             { new: true, runValidators: true } // Return the updated document and enforce validation
         );
 
@@ -122,7 +129,7 @@ const updateCharacter = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: `Character with ID: ${id} updated`,
+            message: `Character with ID: ${id} updated with available skills`,
             data: updatedCharacter,
         });
     } catch (error) {
