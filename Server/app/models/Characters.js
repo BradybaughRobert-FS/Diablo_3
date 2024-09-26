@@ -15,16 +15,8 @@ const characterSchema = new mongoose.Schema({
         required: true,
         min: 1, // Minimum level
         max: 70 // Max level in Diablo 3
-    },
-    // skills: [{
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Skill' // Reference to the Skill model (to be added later)
-    // }],
-    createdDate: {
-        type: Date,
-        default: Date.now // Sets default to the current date
     }
-});
+}, { timestamps: true }); // Automatically adds 'createdAt' and 'updatedAt' fields
 
 // Create and export the model based on the schema
 module.exports = mongoose.model('Character', characterSchema);

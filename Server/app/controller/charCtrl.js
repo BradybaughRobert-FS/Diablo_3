@@ -8,20 +8,30 @@ const getAllCharacters = async (req, res) => {
         const limit = parseInt(req.query.limit) || 10; // Default to 10 characters per page
         const skip = (page - 1) * limit;
 
-        const characters = await Character.find({})
+        // Extract the minLevel and maxLevel from query string
+        const minLevel = parseInt(req.query.minLevel) || 1; // Default min level is 1
+        const maxLevel = parseInt(req.query.maxLevel) || 70; // Default max level is 70
+
+        // Build the filter object
+        const filter = {
+            level: { $gte: minLevel, $lte: maxLevel } // Only include characters whose level is within the range
+        };
+
+        // Apply the filter to the query
+        const characters = await Character.find(filter)
             .skip(skip) // Skip the previous pages
             .limit(limit); // Limit the number of results per page
 
         // Get the total number of characters for pagination info
-        const totalCharacters = await Character.countDocuments();
+        const totalCharacters = await Character.countDocuments(filter);
 
         res.status(200).json({
             success: true,
-            message: `GET all characters on page ${page}`,
+            message: `GET all characters on page ${page} with levels between ${minLevel} and ${maxLevel}`,
             data: characters,
-            total: totalCharacters, // Optional: total number of characters
-            currentPage: page, // Optional: current page number
-            totalPages: Math.ceil(totalCharacters / limit) // Optional: total number of pages
+            total: totalCharacters, // Total number of characters in the current filter
+            currentPage: page, // Current page number
+            totalPages: Math.ceil(totalCharacters / limit) // Total number of pages based on the filtered results
         });
     } catch (error) {
         res.status(500).json({
@@ -31,6 +41,7 @@ const getAllCharacters = async (req, res) => {
         });
     }
 };
+
 
 // Get a character by ID
 const getCharacterById = async (req, res) => {
