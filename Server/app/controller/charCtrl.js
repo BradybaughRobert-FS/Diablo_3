@@ -12,15 +12,23 @@ const getAllCharacters = async (req, res) => {
         const minLevel = parseInt(req.query.minLevel) || 1; // Default min level is 1
         const maxLevel = parseInt(req.query.maxLevel) || 70; // Default max level is 70
 
+        // Select fields to include/exclude (example: ?fields=name,classType)
+        const fields = req.query.fields ? req.query.fields.split(',').join(' ') : '';
+
+        // Sorting (example: ?sort=level or ?sort=-name for descending order)
+        const sortBy = req.query.sort ? req.query.sort : 'name'; // Default to sorting by name
+
         // Build the filter object
         const filter = {
             level: { $gte: minLevel, $lte: maxLevel } // Only include characters whose level is within the range
         };
 
-        // Apply the filter to the query
+        // Apply the filter, select fields, and sort
         const characters = await Character.find(filter)
             .skip(skip) // Skip the previous pages
-            .limit(limit); // Limit the number of results per page
+            .limit(limit) // Limit the number of results per page
+            .select(fields) // Include/exclude specific fields
+            .sort(sortBy); // Sort the results
 
         // Get the total number of characters for pagination info
         const totalCharacters = await Character.countDocuments(filter);
@@ -41,6 +49,7 @@ const getAllCharacters = async (req, res) => {
         });
     }
 };
+
 
 
 // Get a character by ID
